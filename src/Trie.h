@@ -19,7 +19,7 @@ namespace TrieADT
 		~Trie();
 
 		bool load(void);		
-		bool check(std::string& word);		
+		bool check(const std::string& word);		
 		void AddToDictionary(const std::string& new_word);
 
 		unsigned int size(void) const { return m_DictionaryWordCount; };

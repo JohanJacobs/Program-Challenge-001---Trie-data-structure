@@ -51,8 +51,8 @@ int main(int argc, char* argv[])
 			// this can be improved 
 			std::string nword;
 			for (auto c : line)
-			{	
-				if (!isalpha(c) && (nword.size() > 0))
+			{
+				if (!isalpha(c) && (nword.size() > 0) && !(std::find(badWords.begin(),badWords.end(),nword) != badWords.end()))
 				{
 					if (Dictionary.check(nword))					
 						wordcount += 1;
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 				}
 				else if (isalpha(c)) // just disregard any special characters 
 					nword.push_back(c);
-			}			
+			}		
 		}
 
 		std::cout << "Printing misspellings: " << std::endl;

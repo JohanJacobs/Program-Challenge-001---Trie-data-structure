@@ -77,7 +77,7 @@ namespace TrieADT
 		check if a given word is in the Trie
 		use first char->childre[second char] .... is not null 
 	*/
-	bool Trie::check(std::string& word)
+	bool Trie::check(const std::string& word)
 	{
 		std::shared_ptr<TrieADT::TrieNode> child = m_Root; // current node that is being checked 
 		int idx; 
