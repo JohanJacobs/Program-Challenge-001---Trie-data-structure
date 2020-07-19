@@ -3,10 +3,11 @@
 namespace TrieADT
 {
 	Trie::Trie(std::string dictionary_file)
-		:m_DictionaryFile(dictionary_file),m_Root(), m_DictionaryLoaded(false), m_DictionaryWordCount(0)
-	{
-		m_Root = new TrieADT::TrieNode();
+		:m_DictionaryFile(dictionary_file),m_Root(), m_DictionaryWordCount(0)
+	{		
+		m_Root = std::make_shared<TrieADT::TrieNode>();
 		m_Root->isWord = false;
+
 		if (!load())
 		{
 			std::cout << "TrieADT::Trie::Trie could not load dictionary. " << std::endl;
@@ -15,11 +16,7 @@ namespace TrieADT
 	}
 
 	Trie::~Trie()
-	{
-		if (m_DictionaryLoaded)
-		{
-			unload();		
-		}
+	{		
 	}
 
 	bool Trie::load(void)
@@ -48,18 +45,17 @@ namespace TrieADT
 			AddToDictionary(line);			
 		
 		inFile.close();
-		std::cout << "TrieADT::Trie::load completed loading dictionary." << std::endl;
-		m_DictionaryLoaded = true;
+		std::cout << "TrieADT::Trie::load completed loading dictionary." << std::endl;		
 		return true;
 	}
 
 	/*
 		Trie::AddToDictionary(new_word)
-		adds a new word into the dictionary by iterating through the trie and adding new children as it gets to the end.
+		adds a new word into the dictionary by iterating through the Trie and adding new children as it gets to the end.
 	*/
 	void Trie::AddToDictionary(const std::string& new_word)
 	{		
-		TrieADT::TrieNode* child = m_Root;
+		std::shared_ptr<TrieADT::TrieNode> child = m_Root;
 		int idx; // store the character's numerical value 
 		for (int i = 0; i < new_word.size(); i++)
 		{
@@ -67,7 +63,7 @@ namespace TrieADT
 			
 			if (child->children[idx] == NULL) // the character does not exist so create it . 
 			{
-				child->children[idx] = new TrieADT::TrieNode();		
+				child->children[idx] = std::make_shared<TrieADT::TrieNode>();
 				child->children[idx]->isWord = false;
 			}
 			child = child->children[idx]; // set the new child node;
@@ -81,9 +77,9 @@ namespace TrieADT
 		check if a given word is in the Trie
 		use first char->childre[second char] .... is not null 
 	*/
-	bool Trie::check(std::string& const word)
+	bool Trie::check(std::string& word)
 	{
-		TrieADT::TrieNode* child = m_Root; // current node that is being checked 
+		std::shared_ptr<TrieADT::TrieNode> child = m_Root; // current node that is being checked 
 		int idx; 
 		for (char& c : word) 
 		{
@@ -95,28 +91,5 @@ namespace TrieADT
 				return false;			
 		}		
 		return child->isWord;
-	}
-
-	/*
-	  recursively remove the allocated memory  (dfs)
-		1) release each child with memory,
-		2) release self.
-	*/
-	void Trie::unloadNode(TrieADT::TrieNode* top)
-	{
-		if (top == NULL)		
-			return;
-
-		for (TrieADT::TrieNode* c : top->children) 
-		{ // children exists, clean them up
-			unloadNode(c);
-		}
-		delete(top); 
-	}
-	void Trie::unload(void)
-	{
-		unloadNode(m_Root);
-		m_DictionaryLoaded = false;
-		// create stack 
 	}
 }
