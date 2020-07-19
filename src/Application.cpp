@@ -47,25 +47,24 @@ int main(int argc, char* argv[])
 		while (std::getline(inFile, line))
 		{
 			// line contains multiple worlds 		
-			// grab word for a word and test, we check a word when we find a space else we contactinate it all. 
-			// this can be imrpoved 
+			// grab word for a word and test, we check a word when we find a space else we concatenate it all. 
+			// this can be improved 
 			std::string nword;
-			for (char& c : line)
+			for (auto c : line)
 			{	
- 				if (c == ' ')
- 				{
- 					if (nword.size() > 1)
- 						if (Dictionary.check(nword))
- 							wordcount += 1;
- 						else				
- 						{
- 							misspellings += 1;
- 							badWords.push_back(nword);
- 						}
- 					nword.clear();
- 				}
- 				if (isalpha(c))				
- 					nword.push_back(c);
+				if (!isalpha(c) && (nword.size() > 0))
+				{
+					if (Dictionary.check(nword))					
+						wordcount += 1;
+					else
+					{
+						misspellings += 1;
+						badWords.push_back(nword);						
+					}
+					nword.clear();
+				}
+				else if (isalpha(c)) // just disregard any special characters 
+					nword.push_back(c);
 			}			
 		}
 

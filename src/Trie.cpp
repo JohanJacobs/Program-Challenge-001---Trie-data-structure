@@ -81,14 +81,14 @@ namespace TrieADT
 	{
 		std::shared_ptr<TrieADT::TrieNode> child = m_Root; // current node that is being checked 
 		int idx; 
-		for (char& c : word) 
+		for (auto c : word) 
 		{
 			idx = (int)std::tolower((c))-(int)('a'); // get ascii code of character 
 
-			child = child->children[idx]; // get next node
-
-			if ( child == NULL)
-				return false;			
+			if (child->children[idx] == nullptr)
+				return false;
+			else
+				child = child->children[idx]; // get next node
 		}		
 		return child->isWord;
 	}
